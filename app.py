@@ -1,8 +1,8 @@
-from flask import Flask, Response
+from flask import Flask, render_template
 
 
 app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-    return Response('<html><title>To-Do lists</title></html>')
+    return render_template('home.html')
