@@ -1,8 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask
+from lists import lists_bp
 
-
-app = Flask(__name__)
-
-@app.route('/')
-def home_page():
-    return render_template('home.html')
+def create_app():
+    app = Flask(__name__)
+    app.config.update(
+        ENV='development',
+        FLASK_DEBUG=True,
+    )
+    app.register_blueprint(lists_bp)
+    return app
