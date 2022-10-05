@@ -22,3 +22,7 @@ def test_use_home_template(app, capture_template_while_render):
     app.test_client().get('/')
     template_used = capture_template_while_render[0]
     assert template_used == 'home.html'
+
+def test_return_403_while_post_without_csrf(app):
+    response = app.test_client().post('/')
+    assert response.status_code == 403
