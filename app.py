@@ -2,7 +2,7 @@ import secrets
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from mongoengine import connect
-from lists import lists_bp
+from lists.views import lists_bp
 
 
 def create_app():
