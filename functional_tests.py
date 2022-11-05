@@ -1,11 +1,29 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from flask import url_for
 import unittest
-import time
+import pytest
+from mongoengine import connect, disconnect
+from app import create_app
 
 
+@pytest.fixture
+def app():
+    app = create_app()
+    app.config['DEBUG'] = True
+    disconnect()
+    connect(
+        db='mongoenginetest',
+        host='mongomock://localhost',
+        uuidRepresentation='pythonLegacy'
+    )
+    yield app
+    disconnect()
+
+@pytest.mark.usefixtures('live_server')
 class NewVistorTest(unittest.TestCase):
 
     def setUp(self):
@@ -26,7 +44,7 @@ class NewVistorTest(unittest.TestCase):
 
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage 
-        self.browser.get('http://localhost:8000')
+        self.browser.get(url_for('lists.home_page', _external=True))
 
         # She notices the page title and header mention to-do lists
         self.assertIn('To-Do', self.browser.title)
@@ -70,6 +88,7 @@ class NewVistorTest(unittest.TestCase):
         # She visits that URL - her to-do list is still there.
 
         # Satisfied, she goes back to sleep
+
 
 if __name__ == '__main__':
     unittest.main()
